@@ -14,6 +14,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const LINE =
   "I'm out until Monday, but this auto-reply has already approved your request and fired us both.";
 
+// Gate guard (reviser): the competition accepts a single line of 1–140
+// chars. Reject anything outside that range instead of writing a bad entry.
+if (LINE.length < 1 || LINE.length > 140) {
+  throw new Error(`Entry line must be 1-140 chars, got ${LINE.length}`);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE + "\n", "utf8");
 console.log(`Wrote ${LINE.length} chars to /output/entry.txt`);
